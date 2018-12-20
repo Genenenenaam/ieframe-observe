@@ -41,12 +41,12 @@
         innerBox.style.border = '1px solid purple'
         innerBox.style.height = '150px'
         innerBox.style.overflow = 'scroll'
-        bod.append(innerBox)
+        bod.appendChild(innerBox)
         var numberOfelements = 10
         for (var i = 0; i < numberOfelements; i++) {
           var elem = document.createElement('p')
           elem.innerHTML = 'Element ' + i
-          innerBox.append(elem)
+          innerBox.appendChild(elem)
         }
         // ----- end of the setup ------
 
@@ -54,7 +54,7 @@
         var obs = document.createElement('p')
         obs.id = 'observe-me'
         obs.innerHTML = 'Observe this!'
-        innerBox.append(obs)
+        innerBox.appendChild(obs)
 
         // Setup the observer
         // Can root any: documentElement, body, or innerBox (all work in Chrome)
