@@ -1,0 +1,80 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>IE iFrame Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      iframe {
+        border: 1px solid orange;
+        height: 200px;
+      }
+    </style>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+  </head>
+  <body>
+    <h1>IE iFrame Observable Test</h1>
+    <p>This is a simple test to see IE11 can observe within an embedded iFrame</p>
+    <a href="https://github.com/w3c/IntersectionObserver/tree/master/polyfill" target="_blank"
+      >IE Observable Polyfill</a
+    >
+    <br />
+    <a href="https://polyfill.io/v2/docs/features/#IntersectionObserver" target="_blank">
+      Polyfill.io IntersectionObserver
+    </a>
+
+    <div>
+      <p>Observables within a generated iFrame</p>
+      <iframe id="inner-root"> </iframe>
+      <p id="result"></p>
+    </div>
+
+    <script type="text/javascript">
+      ;(function() {
+        // Setup (you can probably ignore this chunk)
+        var doc = document.getElementById('inner-root').contentDocument
+        var bod = doc.getElementsByTagName('body')[0]
+        var result = document.getElementById('result')
+        var innerBox = document.createElement('div')
+        innerBox.id = 'inner-box'
+        innerBox.style.border = '1px solid purple'
+        innerBox.style.height = '150px'
+        innerBox.style.overflow = 'scroll'
+        bod.append(innerBox)
+        var numberOfelements = 10
+        for (var i = 0; i < numberOfelements; i++) {
+          var elem = document.createElement('p')
+          elem.innerHTML = 'Element ' + i
+          innerBox.append(elem)
+        }
+        // ----- end of the setup ------
+
+        // Attaching the observable p tag:
+        var obs = document.createElement('p')
+        obs.id = 'observe-me'
+        obs.innerHTML = 'Observe this!'
+        innerBox.append(obs)
+
+        // Setup the observer
+        // Can root any: documentElement, body, or innerBox (all work in Chrome)
+        var options = {
+          root: doc.documentElement,
+          //root: innerBox,
+          // root: bod,
+          rootMargin: '0px',
+          threshold: 1.0
+        }
+        var callback = function(entries, observer) {
+          entries.forEach(function(entry) {
+            result.innerHTML = 'Observed: ' + entry.intersectionRatio
+          })
+        }
+        var observer = new IntersectionObserver(callback, options)
+        var reSelectedObs = doc.getElementById('observe-me')
+        reSelectedObs.style.background = 'orange'
+        observer.observe(reSelectedObs)
+      })()
+    </script>
+  </body>
+</html>
